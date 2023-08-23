@@ -11,23 +11,23 @@ from sqlalchemy.sql.schema import Table
 
 """Define the place_amenity Table for the DBStorage case"""
 if storage_type == 'db':
-
     place_amenity = Table('Place_amenity', Base.metadata, Column(
-        'place_id', String(60),
-        ForeignKey('places.id'),
-        primary_key=True,
-        nullable=False),
-        Column(
-            'amenity_id', String(60),
-            ForeignKey('amenities.id'),
-            primary_key=True,
-            nullable=False)
-        )
+                'place_id', String(60),
+                ForeignKey('places.id'),
+                primary_key=True,
+                nullable=False
+                ),
+            Column(
+                'amenity_id', String(60),
+                ForeignKey('amenities.id'),
+                primary_key=True,
+                nullable=False)
+            )
+
 
 class Place(BaseModel, Base):
     """ This class defines a place by various attributes """
     __tablename__ = 'places'
-
     if storage_type == 'db':
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
@@ -39,11 +39,11 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
+
+        """ Update to the backref name """
         amenities = relationship(
                 'Amenity', secondary=place_amenity,
                 viewonly=False, backref='place_amenities')
-        user = relationship("User", back_populates="places")
-        city = relationship("City", back_populates="places")
         reviews = relationship(
                 "Review", backref='place',
                 cascade="all, delete, delete-orphan"
@@ -65,25 +65,29 @@ class Place(BaseModel, Base):
             """ Returns list of review instances with place_id """
             from models import storage
             all_revs = storage.all(Review)
-            return [
-                    rev for rev in all_revs.values(
-
-                        ) if rev.place_id == self.id]
+            lst = []
+            for rev in all_revs.values():
+                if rev.place_id == self.id:
+                    lst.append(rev)
+            return lst
 
         @property
         def amenities(self):
             """ Returns the list of Amenity instances linked to the Place """
             from models import storage
             all_amens = storage.all(Amenity)
-            return [amen for amen in all_amens.values(
-
-                ) if amen.id in self.amenity_ids]
+            lst = []
+            for amen in all_amens.values():
+                if amen.id in self.amenity_ids:
+                    lst.append(amen)
+            return lst
 
         @amenities.setter
         def amenities(self, obj):
             """
             Method for adding an Amenity.id to the attribute amenity_ids
             """
-            if (obj is not None and isinstance(obj, Amenity) and
-                    obj.id not in self.amenity_ids):
-                self.amenity_ids.append(obj.id)
+            if obj is not None:
+                if isinstance(obj, Amenity):
+                    if obj.id not in self.amenity_ids:
+                        self.amenity_ids.append(obj.id)
