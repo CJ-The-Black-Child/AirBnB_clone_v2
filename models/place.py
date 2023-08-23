@@ -9,6 +9,21 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Table
 
 
+"""Define the place_amenity Table for the DBStorage case"""
+if storage_type == 'db':
+
+    place_amenity = Table('Place_amenity', Base.metadata, Column(
+        'place_id', String(60),
+        ForeignKey('places.id'),
+        primary_key=True,
+        nullable=False),
+        Column(
+            'amenity_id', String(60),
+            ForeignKey('amenities.id'),
+            primary_key=True,
+            nullable=False)
+        )
+
 class Place(BaseModel, Base):
     """ This class defines a place by various attributes """
     __tablename__ = 'places'
@@ -72,18 +87,3 @@ class Place(BaseModel, Base):
             if (obj is not None and isinstance(obj, Amenity) and
                     obj.id not in self.amenity_ids):
                 self.amenity_ids.append(obj.id)
-
-
-"""Define the place_amenity Table for the DBStorage case"""
-if storage_type == 'db':
-    place_amenity = Table('Place_amenity', Base.metadata, Column(
-                'place_id', String(60),
-                ForeignKey('places.id'),
-                primary_key=True,
-                nullable=False),
-            Column(
-                'amenity_id', String(60),
-                ForeignKey('amenities.id'),
-                primary_key=True,
-                nullable=False)
-            )
