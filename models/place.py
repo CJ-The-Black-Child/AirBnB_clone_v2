@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Place Module for HBNB project """
+""" Place Module for The HBNB project """
 from models.base_model import BaseModel, Base
 from models import storage_type
 from models.amenity import Amenity

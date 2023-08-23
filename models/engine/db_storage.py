@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Implementation of the database storage engine.
+Implementation of the database storage engines.
 """
 
 from sqlalchemy import create_engine
