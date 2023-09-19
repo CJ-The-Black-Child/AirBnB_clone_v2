@@ -26,13 +26,14 @@ echo -e "\e[1;32m Directories created\e[0m"
 echo
 
 # Add a test HTML file
-echo "<html>
-      	<head>
-      	</head>
-	<body>
-	    Holberton School
-	</body>
-      </html>" >  /data/web_static/releases/test/index.html
+echo "
+<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" >  /data/web_static/releases/test/index.html
 echo -e "\e[1;32m Test HTML file added\e[0m"
 echo
 
