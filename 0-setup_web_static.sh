@@ -55,7 +55,7 @@ nginx_config="/etc/nginx/sites-available/default"
 nginx_config_line="location /hbnb_static/ {
 	alias /data/web_static/current/;
 }"
-sudo sed -i "/location \/ {/a $nginx_config_line" "$nginx_config"
+sudo sed -E -i "/location \/ {/a $nginx_config_line" "$nginx_config"
 echo -e "\e[1;32m Nginx configuration updated\e[0m"
 echo
 
