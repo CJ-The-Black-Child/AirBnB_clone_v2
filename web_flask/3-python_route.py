@@ -13,12 +13,13 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/',strict_slashes=False)
-def hello_hbnb():
+@app.route('/', strict_slashes=False)
+def hello_route():
     """
     Prints the text Hello HBNB
     """
     return "Hello HBNB!"
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
@@ -27,22 +28,28 @@ def hbnb():
     """
     return "HBNB"
 
+
 @app.route('/c/<string:text>', strict_slashes=False)
 def c_text(text):
     """
     Prints C <text> content
     """
-    text_formatted = text.replace("_", " ")
-    return "C {}".format(text_formatted)
+    text = text.replace("_", " ")
+    return "C %s" % text
 
-@app.route('/python', defaults={'text': 'is cool'}, strict_slashes=False)
-@app.route('python/<text>', strict_slashes=False)
-def python_text(text):
+
+@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('/python/<string:text>', strict_slashes=False)
+def python_text(text="is cool"):
     """
     Prints the text Python is cool
     """
-    text_formatted = text.replace("_", " ")
-    return "Python {}".format(text_formatted)
+    text = text.replace("_", " ")
+    return "Python %s" % text
+
 
 if __name__ == "__main__":
+    """
+    Starts the Flask development server
+    """
     app.run(host="0.0.0.0")

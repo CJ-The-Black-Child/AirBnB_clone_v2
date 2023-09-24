@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_hbnb():
+def hello_route():
     """
     Prints the text "Hello HBNB"
     """
@@ -40,7 +40,7 @@ def c_text(text):
 
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<string:text>', strict_slashes=False)
-def py_text(text="is cool"):
+def python_text(text="is cool"):
     """
     This prints python is cool
     """
