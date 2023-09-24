@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 """
 Starts a Falsk web application
+Routes as:
+    / - displays "Hello HBNB!"
 """
 
 from flask import Flask
+
+app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
