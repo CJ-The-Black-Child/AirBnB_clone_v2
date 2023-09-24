@@ -6,48 +6,11 @@ using the function do_deploy
 
 
 import os
-from datetime import datetime
-from fabric.api import env, put, run, runs_once, local
+from fabric.api import env, put, run
 
 """ Define server Ip addresses """
 env.hosts = ['34.237.91.196', '3.89.146.172']
 
-
-def pack_web_static():
-    """
-    Create and packs the web_static archive.
-    Returns:
-        The path to the created archive or None if there was an error.
-    """
-
-    if not os.path.isdir("versions"):
-        os.mkdir("versions")
-
-    """ Generate a uunique archive name based on the current timestamp """
-    cur_time = datetime.now()
-    archive_name = "versions/web_static_{}{}{}{}{}{}.tgz".format(
-            cur_time.year,
-            cur_time.month,
-            cur_time.day,
-            cur_time.hour,
-            cur_time.minute,
-            cur_time.second
-            )
-    try:
-        print("Packing web_static to {}".format(archive_name))
-        local("tar -cvzf {} web_static".format(archive_name))
-        archive_size = os.stat(archive_name).st_size
-        print("web_static packed: {} -> {} Bytes".format(
-            archive_name, archive_size
-            )
-            )
-        return archive_name
-    except Exception as e:
-        print("Error packing web_static:", e)
-        return None
-
-
-@runs_once
 def do_deploy(archive_path):
     """
     Deploys the static files to the host servers
@@ -92,7 +55,9 @@ def do_deploy(archive_path):
 
 if __name__ == "__main__":
     """ Pack the web_static directory and get the archive path """
-    archive_path = pack_web_static()
-    if archive_path:
+    archive_path = "versions/web_static_20230923191314.tgz"
+    if do_deploy(archive_path):
         """ Deploy the archuve to the servers """
-        do_deploy(archive_path)
+        print("Deployment successful")
+    else:
+        print("Deployment failed")
