@@ -40,7 +40,7 @@ def do_deploy(archive_path):
         run("rm -rf /tmp/{}".format(file_name))
 
         """ Move the contents to the correct location """
-        run("mv /data/web_static/releases/{}/.* /data/web_static/releases/{}/".format(folder_name, folder_name)
+        run("mv {}/web_static/* {}/".format(folder_path, folder_path))
         run("rm -rf {}web_static".format(folder_path))
 
         """ Update the symbolic link """
