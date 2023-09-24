@@ -32,17 +32,17 @@ def c_text(text):
     """
     Prints C <text> content
     """
-    text = text.replace("_", " ")
-    return "C %s" % text
+    text_formatted = text.replace("_", " ")
+    return "C {}".format(text_formatted)
 
-@app.route('/python', strict_slashes=False)
-@app.route('python/<string:text>', strict_slashes=False)
-def python_text(text="is cool"):
+@app.route('/python', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('python/<text>', strict_slashes=False)
+def python_text(text):
     """
     Prints the text Python is cool
     """
-    text = text.replace("_", " ")
-    return "Python %s" % text
+    text_formatted = text.replace("_", " ")
+    return "Python {}".format(text_formatted)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
