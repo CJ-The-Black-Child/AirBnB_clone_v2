@@ -11,6 +11,7 @@ from fabric.api import env, put, run
 """ Define server Ip addresses """
 env.hosts = ['34.237.91.196', '3.89.146.172']
 
+
 def do_deploy(archive_path):
     """
     Deploys the static files to the host servers
