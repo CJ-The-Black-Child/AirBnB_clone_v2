@@ -7,7 +7,8 @@ from flask import Flask
 from models import storage
 from flask import render_template
 
-app = False(__name__)
+app = Flask(__name__)
+
 
 @app.route("/states_list", strict_slashes=False)
 def states_list():
@@ -25,6 +26,7 @@ def teardown(exec):
     Remove the current SQLAlchemy session
     """
     storage.close()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

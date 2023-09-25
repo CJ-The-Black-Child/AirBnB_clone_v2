@@ -2,7 +2,7 @@
 """
 Starts the Flask Web App
 The appicatopm listens through 0.0.0.0:5000
-Routes: 
+Routes:
     /cities_by_states: HTML page with a list of all states and related cities.
 """
 
@@ -22,12 +22,14 @@ def cities_by_states():
     states = storage.all("State")
     return render_template("8-cities_by_states.html", states=states)
 
+
 @app.teardown_appcontext
 def teardown(exc):
     """
     Remove the current SQLAlchemy session.
     """
     storage.close()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
