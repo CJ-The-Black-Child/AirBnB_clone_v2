@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_route():
+def hbnb_route():
     """
     Prints the text "Hello HBNB"
     """
@@ -57,4 +57,4 @@ def number_n(n):
 
 
 if __name__ == "__main__":
-    app.run("host=0.0.0.0")
+    app.run(host="0.0.0.0")
