@@ -12,12 +12,14 @@ def hbnb_route():
     """
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """
     Prints HBNB
     """
     return "HBNB"
+
 
 @app.route('/c/<string:text>', strict_slashes=False)
 def c_text(text):
