@@ -10,7 +10,6 @@ from datetime import datetime
 from fabric.api import env, local, put, run, runs_once
 
 env.hosts = ['34.237.91.196', '3.89.146.172']
-env.user = 'ubuntu'
 
 
 @runs_once
@@ -20,7 +19,7 @@ def do_pack():
         os.mkdir("versions")
 
     cur_time = datetime.now()
-    output = "versions/web_static_{}{}{}{}{}{}".format(
+    output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
             cur_time.year,
             cur_time.month,
             cur_time.day,
@@ -31,12 +30,12 @@ def do_pack():
 
     try:
         print("Packing web_static to {}".format(output))
-        local("tar -cvzf{} web_static".format(output))
+        local("tar -cvzf {} web_static".format(output))
         archive_size = os.stat(output).st_size
         print("web_static packed: {} -> {} Bytes".format(output, archive_size))
-        return output
     except Exception:
-        return None
+        output = None
+    return None
 
 
 def do_deploy(archive_path):
@@ -76,12 +75,4 @@ def deploy():
     Archives and deploys the static files to the host servers.
     """
     archive_path = do_pack()
-
-    if archive_path:
-        return do_deploy(archive_path)
-    else:
-        return False
-
-
-if __name__ == "__main__":
-    deploy()
+    return do_deploy(archive_path) if archive_path else False
