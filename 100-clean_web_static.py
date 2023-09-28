@@ -26,7 +26,7 @@ def do_pack():
             cur_time.hour,
             cur_time.minute,
             cur_time.second
-            )
+    )
 
     try:
         print("Packing web_static to {}".format(output))
@@ -55,7 +55,7 @@ def do_deploy(archive_path):
     try:
         put(archive_path, "/tmp/{}".format(file_name))
         run("mkdir -p {}".format(folder_path))
-        run("tar -xzf /tmp{} -C {}".format(file_name, folder_path))
+        run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
         run("rm -rf /tmp/{}".format(file_name))
         run("mv {}web_static/* {}".format(folder_path, folder_path))
         run("rm -rf {}web_static".format(folder_path))
@@ -81,21 +81,25 @@ def deploy():
         return False
 
 
-def do_clear(number=0):
+def do_clean(number=0):
     """
     Delets out-of date arhives of the static files
     Args:
         number(Any): The number of archives to keep.
     """
-    if int(number) < 2:
-        number = 1
+    archives = os.listdir('versions/')
+    archives.sort(reverse=True)
+    start = int(number)
+    if not start:
+        start += 1
     else:
-        number = int(number) + 1
-    local("ls -1t versions/ | tail -n +{} | xargs -I {{}} rm versions/{{}}".format(number))
-    run("ls -1t /data/web_static/releases/ | tail -n {} | xargs -I {{}} rm -rf /data/web_static/releases/{{}})".format(number))
-    run("find /data/web_static/releases/ -mindepth 1 -type d -exec rmdir {{}} \;")
-    run("rm -rf /data/web_static/current")
-    print("Deleted out-of-date archives")
-
-if __name__ == "__main__":
-    do_clean()
+        archives = []
+    for archive in archives:
+        os.unlink('versions/{}'.format(archive))
+    cmd_parts = [
+            "rm -rf $(",
+            "find /data/web_static/releases/ -maxdepth 1 -type d -iregex",
+            " '/data/web_static/releases/web_static_.*'",
+            " | sort -r | tr '\\n' ' ' | cut -d ' ' -f{}-)".format(start + 1)
+            ]
+    run(''.join(cmd_parts))
