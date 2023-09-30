@@ -9,18 +9,20 @@ require     => Package['nginx'],
 logoutput   => true,
 }
 
-# Configure firewall to allow Nginx HTTP connections
-exec { 'allow_nginx_http':
-command => 'ufw allow "Nginx HTTP"',
-path    => '/usr/bin',
-require => Exec['update_and_install_nginx'],
+# Create /data directory
+file { '/data':
+ensure => 'directory',
+owner  => 'ubuntu',
+group  => 'ubuntu',
+mode   => '0755',
 }
 
-# Creeate directories
-
-$directories = ['/data/web_static/release/test', '/data/web_static/shared']
-file { $directories:
-ensure  => 'directory',
+# Create /data/web_static/releases directory
+file { '/data/web_static/releases':
+ensure => 'directory',
+owner  => 'ubuntu',
+group  => 'ubuntu',
+mode   => '0755',
 }
 
 # Add a test HTML file
@@ -31,6 +33,20 @@ owner   => 'ubuntu',
 group   => 'ubuntu',
 mode    => '0644',
 require => File['/data/web_static/releases/test'],
+}
+
+# Configure firewall to allow Nginx HTTP connections
+exec { 'allow_nginx_http':
+command => 'ufw allow "Nginx HTTP"',
+path    => '/usr/bin',
+require => Exec['update_and_install_nginx'],
+}
+
+# Create directories
+
+$directories = ['/data/web_static/release/test', '/data/web_static/shared']
+file { $directories:
+ensure  => 'directory',
 }
 
 # Prevent overwriting the current symlink
