@@ -1,4 +1,5 @@
 # AirBnB clone web server setup and configuration
+
 # Update packages and install Nginx
 exec { 'update_and_install_nginx':
 command     => 'apt-get -y update && apt-get -y install nginx',
